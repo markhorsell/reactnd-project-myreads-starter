@@ -6,13 +6,13 @@ import '../App.css'
 class Book extends React.Component {
    
     render() {
-         const { title, authors, cover } = this.props;
+         const { title, authors, cover, change, shelf } = this.props;
         return (
             <div className="book">
                 <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:cover }}></div>
                     <div className="book-shelf-changer">
-                        <select>
+                        <select onChange={change} value={shelf}>
                             <option value="none" disabled>Move to...</option>
                             <option value="currentlyReading">Currently Reading</option>
                             <option value="wantToRead">Want to Read</option>
@@ -29,7 +29,7 @@ class Book extends React.Component {
 }
 Book.propTypes = {
        title: PropTypes.string.isRequired,
-        authors: PropTypes.string.isRequired,
+      
          cover: PropTypes.string.isRequired,
         
     }
