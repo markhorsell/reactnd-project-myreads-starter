@@ -36,33 +36,32 @@ class List extends Component {
         BooksAPI.update(book, shelf)
             .then((books) => {
 
-                //refresh shelves without calling API
+              //refresh shelves without calling API
                 
-                let wantToRead = this.state.wantToRead.filter(b => {
-                    return b.id !== book.id
-                })
-                let currentlyReading = this.state.currentlyReading.filter(b => {
-                    return b.id !== book.id
-                })
-                let read = this.state.read.filter(b => {
-                    return b.id !== book.id
-                })
-                
-                
-                    if(shelf==='wantToRead'){
-                        wantToRead.push(book)
+              let wantToRead = this.state.wantToRead.filter(b => {
+                return b.id !== book.id
+            })
+            let currentlyReading = this.state.currentlyReading.filter(b => {
+                return b.id !== book.id
+            })
+            let read = this.state.read.filter(b => {
+                return b.id !== book.id
+            })
+            
+                if(shelf==='wantToRead'){
+                    wantToRead.push(book)
 
-                    }
-                    if(shelf==='currentlyReading'){
-                        currentlyReading.push(book)
-                    }
-                    if(shelf==='read'){
-                            read.push(book)
-                    }
-                this.setState({ 
-                    wantToRead:wantToRead, 
-                    currentlyReading:currentlyReading, 
-                    read:read }) 
+                }
+                if(shelf==='currentlyReading'){
+                    currentlyReading.push(book)
+                }
+                if(shelf==='read'){
+                        read.push(book)
+                }
+            this.setState({ 
+                wantToRead:wantToRead, 
+                currentlyReading:currentlyReading, 
+                read:read })
             })
     }
     render() {

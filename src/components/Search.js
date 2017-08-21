@@ -4,38 +4,17 @@ import * as BooksAPI from '../BooksAPI'
 import Book from './Book'
 
 class Search extends React.Component {
-
     state = {
         query: '',
         books: [],
-        wantToRead: [],
-        currentlyReading: [],
-        read: []
+        booksOnShelf: []
     }
     componentDidMount() {
         BooksAPI.getAll().then((books) => {
-         
-            const wantToRead = books.filter(b => {
-                return b.shelf === 'wantToRead'
-            })
-            const currentlyReading = books.filter(b => {
-                return b.shelf === 'currentlyReading'
-            })
-            const read = books.filter(b => {
-                return b.shelf === 'read'
-            })
-
-        
-            this.setState({ 
-                wantToRead:wantToRead, 
-                currentlyReading:currentlyReading, 
-                read:read })
+            this.setState({ booksOnShelf: books })
         })
     }
-  
-    
     updateBook = (book, shelf) => {
-       
         BooksAPI.update(book, shelf)
             .then((books) => {
                 const newState = this.state.books.map(b => {
@@ -44,16 +23,15 @@ class Search extends React.Component {
                     }
                     return b;
                 });
-                this.setState({ books: newState })
+                this.setState({ booksOnShelf: newState })
             })
     }
     updateQuery = (query) => {
         this.search(query, 10)
     }
-
     search = (query, maxResults) => {
         if (query !== '') {
-            
+
             BooksAPI.search(query, maxResults)
                 .then((books) => {
                     if (books === undefined) {
@@ -63,17 +41,20 @@ class Search extends React.Component {
                         books = [];
                     }
                     if (books.length > 0) {
-                       
-                        const shelfChecked=books.map(b=>{
-                            if(b.authors===undefined){
-                                b.authors=[];
+                        const shelfChecked = books.map(b => {
+                            if (b.authors === undefined) {
+                                b.authors = [];
                             }
-                            b.shelf='default';
-                            return b;
+                            b.shelf = 'default';
+                            for (let shelvedBook of this.state.booksOnShelf) {
+                                if (shelvedBook.id === b.id) {
+                                    b.shelf = shelvedBook.shelf;
+                                }
+                            }
+                            return b
                         })
-                       
                         this.setState({ books: shelfChecked })
-                    }else{
+                    } else {
                         this.setState({ books: [] })
                     }
                 })
